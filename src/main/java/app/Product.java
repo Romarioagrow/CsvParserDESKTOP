@@ -1,3 +1,5 @@
+package app;
+
 class Product {
     private Integer id;
     private String name;

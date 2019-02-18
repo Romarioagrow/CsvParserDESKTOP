@@ -1,3 +1,4 @@
+package app;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import org.eclipse.collections.impl.block.factory.HashingStrategies;
@@ -81,18 +82,18 @@ public class Collector extends Thread {
     static void dataOutputting(List<Product> cheapestProducts) throws IOException {
         final List<String[]> stringData = new ArrayList<String[]>();
 
-        // Присвоить уникальное имя выходному файлу
+        // Get the unique name for the outputing file
         UUID randomName = UUID.randomUUID();
-        String path = "C:\\Users\\Rescue\\Desktop\\Output_№"+randomName+".csv";
+        String path = "C:\\Users\\Rescue\\Desktop\\Output_№"+randomName+".csv"; // Where to put the file
         CSVWriter csvWriter = new CSVWriter(new FileWriter(path), ',', '"');
 
-        // Отсортировать по Price
+        // Sort by Price
         cheapestProducts.sort(Comparator.comparing(Product::getPrice));
 
-        // Отфильтроваьть повторяющиеся ID в cheapestProducts
+        // To filter repeating ID in the cheapest Products
         cheapestProducts = ListIterate.distinct(cheapestProducts, HashingStrategies.fromIntFunction(Product::getId));
 
-        // Вывести необходимое количество Product из коллекции в массив строк
+        // View required amount of Product from the collection to the String array
         cheapestProducts.stream()
                 .limit(getAmount())
                 .forEach(product -> stringData.add(new String[] {
@@ -102,16 +103,16 @@ public class Collector extends Thread {
                         product.getCondition(),
                         Float.toString(product.getPrice())}));
 
-        // Записать массив в файл и сохранить
+        // Write the array to the file and save
         csvWriter.writeAll(stringData);
         csvWriter.close();
 
         System.out.println("\nYour CSV file is " + path);
     }
 
-    // Промежуточная обработка данных
+    // Data processing
     private static void dataProcessing(List<Product> products) {
-        // Отсортировать по Price
+        // Sort по Price
         products.sort(Comparator.comparing(Product::getPrice));
 
         // Отсеить повторяющиеся Product ID
